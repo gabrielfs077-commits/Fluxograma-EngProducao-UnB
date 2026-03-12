@@ -10,7 +10,7 @@
             --cor-exatas: #d4d47a; --cor-producao-bas: #6ca85d; --cor-producao-esp: #5c88c2; --cor-humanas: #d68a8a;
             --cor-projetos: #e0e0e0; --cor-seletiva: #4a4a4a; --cor-concluido: #1b5e20;
             --cor-alerta: #ff9800; --cor-erro: #f44336; --cor-saudavel: #4CAF50;
-            --cor-nivel: #4facfe;
+            --cor-nivel: #4facfe; --cor-planejado: #1976d2; --cor-destrancado: #00e676;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -20,22 +20,15 @@
             background-color: var(--cor-fundo); 
             color: var(--cor-texto); 
             padding-top: 90px; 
-            padding-bottom: 40px;
+            padding-bottom: 80px; 
         }
         
-        /* HEADER INTELIGENTE */
         header { 
-            position: fixed; 
-            top: 0; left: 0; width: 100%; 
-            background: rgba(18, 18, 18, 0.95); 
-            backdrop-filter: blur(8px);
+            position: fixed; top: 0; left: 0; width: 100%; 
+            background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(8px);
             border-bottom: 1px solid var(--cor-borda-semestre);
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            padding: 10px 25px;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 25px; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
         
         .header-esq { display: flex; flex-direction: column; gap: 4px; }
@@ -48,35 +41,45 @@
         .status-vermelho { background: rgba(244, 67, 54, 0.15); color: #e57373; border: 1px solid #f44336; animation: piscarStatus 2s infinite;}
         
         @keyframes piscarStatus { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-
         .msg-termometro { font-size: 0.75rem; color: #aaa; }
 
         .header-dir { display: flex; align-items: center; gap: 20px; }
         .grupo-controles { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
         
-        .nivel-badge {
-            background: rgba(79, 172, 254, 0.15);
-            color: var(--cor-nivel);
-            border: 1px solid var(--cor-nivel);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            width: 100%;
-            text-align: center;
-        }
+        .nivel-badge { background: rgba(79, 172, 254, 0.15); color: var(--cor-nivel); border: 1px solid var(--cor-nivel); padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; width: 100%; text-align: center; }
 
+        /* CONTADOR ATUALIZADO COM LARGURA PARA O TEXTO "SEMESTRES" */
         .contador-semestres { display: flex; align-items: center; gap: 8px; background: var(--cor-fundo-semestre); padding: 4px 12px; border-radius: 6px; border: 1px solid var(--cor-borda-semestre); font-size: 0.8rem;}
         .contador-semestres button { background: #333; color: white; border: none; padding: 2px 12px; border-radius: 4px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: 0.2s; }
         .contador-semestres button:hover { background: #555; }
         
         .botoes-acao { display: flex; gap: 8px; width: 100%; justify-content: flex-end;}
-        .btn-reset { background: transparent; color: #aaa; border: 1px solid #555; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; transition: 0.2s; width: 100%;}
+        .btn-reset { background: transparent; color: #aaa; border: 1px solid #555; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; transition: 0.2s;}
         .btn-reset:hover { background: var(--cor-erro); color: white; border-color: var(--cor-erro); }
+        
+        .btn-simular { background: rgba(79, 172, 254, 0.1); color: #4facfe; border: 1px solid #4facfe; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; font-weight: bold; transition: 0.3s;}
+        .btn-simular:hover, .btn-simular.ativo { background: #4facfe; color: #fff; box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);}
 
         .perc-display { font-size: 2rem; font-weight: bold; display: flex; align-items: baseline; transition: color 0.3s; color: var(--cor-saudavel);}
         .perc-symbol { font-size: 1rem; opacity: 0.6; font-weight: normal; margin-left: 2px;}
+
+        /* BARRA FLUTUANTE DE SIMULAÇÃO */
+        .barra-simulacao {
+            position: fixed; bottom: -120px; left: 0; width: 100%;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white; padding: 12px 25px; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
+            transition: all 0.4s ease; z-index: 1000; border-top: 2px solid #4facfe;
+        }
+        .barra-simulacao.visivel { bottom: 0; }
+        .barra-simulacao.limite-excedido { background: linear-gradient(to right, #8e0000, #d32f2f); border-top: 2px solid #ff5252; }
+        
+        .sim-info { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+        .sim-titulo { font-weight: bold; font-size: 1rem; display: flex; align-items: center; gap: 8px;}
+        .sim-detalhes { font-size: 0.85rem; opacity: 0.9; }
+        .sim-destranca { color: #00e676; font-weight: bold; margin-top: 2px; font-size: 0.8rem; display: block;}
+        .btn-limpar-sim { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: 0.2s; white-space: nowrap; margin-left: 15px;}
+        .btn-limpar-sim:hover { background: rgba(255,255,255,0.2); }
 
         @media (max-width: 768px) {
             header { flex-direction: column; align-items: flex-start; gap: 12px; padding: 12px 15px; }
@@ -84,21 +87,13 @@
             .grupo-controles { align-items: flex-start; }
             .botoes-acao { justify-content: flex-start; }
             body { padding-top: 170px; } 
+            .barra-simulacao { flex-direction: column; gap: 10px; padding: 15px; text-align: left; align-items: flex-start;}
+            .btn-limpar-sim { margin-left: 0; width: 100%; text-align: center;}
         }
         
-        /* CONTAINERS E LAYOUT */
         .main-container { max-width: 1400px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; padding: 0 15px; }
 
-        /* BANNER INTRODUTÓRIO (Apresentação do Projeto) */
-        .boas-vindas {
-            text-align: center;
-            padding: 15px 20px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            border-radius: 8px;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            border: 1px solid #4facfe;
-        }
+        .boas-vindas { text-align: center; padding: 15px 20px; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); border-radius: 8px; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 1px solid #4facfe; }
         .boas-vindas h2 { margin: 0 0 5px 0; font-size: 1.2rem; }
         .boas-vindas p { margin: 0; font-size: 0.85rem; opacity: 0.9; }
 
@@ -109,7 +104,6 @@
         .semestre { background: var(--cor-fundo-semestre); padding: 12px; border-radius: 8px; border: 1px solid var(--cor-borda-semestre); width: 100%; }
         .semestre-titulo { font-weight: bold; font-size: 1rem; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid var(--cor-borda-semestre); color: #fff; text-align: center; }
         
-        /* Grid mais compacto para caber mais cards no celular */
         .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
 
         @media (min-width: 900px) {
@@ -122,23 +116,18 @@
             .fluxograma-container::-webkit-scrollbar-thumb { background: #555; border-radius: 5px; }
         }
 
-        /* BANCO DE SELETIVAS - Otimizado para não gastar altura */
-        .bloco-cadeia { 
-            display: flex; flex-direction: row; gap: 8px; background: #222; 
-            padding: 8px; border-radius: 6px; border: 1px solid #444; 
-            align-items: center; justify-content: center; flex-wrap: wrap;
-        }
+        .bloco-cadeia { display: flex; flex-direction: row; gap: 8px; background: #222; padding: 8px; border-radius: 6px; border: 1px solid #444; align-items: center; justify-content: center; flex-wrap: wrap; }
         .titulo-cadeia { font-size: 0.7rem; color: #aaa; font-weight: bold; width: 100%; text-align: center; margin-bottom: 2px;}
         .separador-ou { font-size: 0.65rem; color: #666; font-weight: bold; margin: 0 5px; }
         .grid-seletivas { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
 
-        /* CARDS COMPACTADOS */
+        /* CARDS E ESTADOS */
         .card { padding: 8px 6px; border-radius: 6px; text-align: center; border: 2px solid transparent; transition: all 0.2s ease; user-select: none; position: relative; color: #111; box-shadow: 0 2px 4px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: space-between; min-height: 55px;}
         .card-seletiva { flex: 1; min-width: 120px; }
         
         .card-codigo { font-size: 0.55rem; opacity: 0.7; letter-spacing: 0.5px; margin-bottom: 2px; font-family: monospace;}
-        .card-nome { font-size: 0.7rem; font-weight: bold; line-height: 1.1;}
-        .ch-badge { display: block; font-size: 0.6rem; margin-top: 4px; opacity: 0.8; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 2px;}
+        .card-nome { font-size: 0.7rem; font-weight: bold; line-height: 1.1; pointer-events: none;}
+        .ch-badge { display: block; font-size: 0.6rem; margin-top: 4px; opacity: 0.8; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 2px; pointer-events: none;}
         
         .disponivel { cursor: pointer; }
         .disponivel:hover { transform: translateY(-2px); filter: brightness(1.1); }
@@ -148,13 +137,25 @@
         .concluido .ch-badge { border-top: 1px solid rgba(255,255,255,0.2); }
         .concluido::after { content: '✓'; position: absolute; top: -6px; right: -6px; background: #4CAF50; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 11px; line-height: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         
+        .planejado { background-color: var(--cor-planejado) !important; color: #fff !important; border-color: #4facfe !important; cursor: pointer; border-style: dashed !important;}
+        .planejado .ch-badge { border-top: 1px solid rgba(255,255,255,0.2); }
+        .planejado::after { content: '📅'; position: absolute; top: -6px; right: -6px; background: var(--cor-planejado); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; line-height: 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+        .destrancado-simulacao { 
+            border-color: var(--cor-destrancado) !important; border-style: dashed !important; border-width: 2px !important;
+            box-shadow: 0 0 10px rgba(0, 230, 118, 0.4) !important; animation: pulsarVerde 2s infinite; opacity: 1 !important; filter: grayscale(0); cursor: pointer;
+        }
+        .destrancado-simulacao::before { content: '🔓 Liberou'; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--cor-destrancado); color: #111; font-size: 0.55rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; white-space: nowrap;}
+        @keyframes pulsarVerde { 0%, 100% { box-shadow: 0 0 5px rgba(0, 230, 118, 0.2); } 50% { box-shadow: 0 0 15px rgba(0, 230, 118, 0.8); } }
+
+        .efeito-domino { border-color: #ffeb3b !important; box-shadow: 0 0 15px rgba(255, 235, 59, 0.7) !important; transform: scale(1.03); filter: brightness(1.2); z-index: 10; opacity: 1 !important;}
+
         .alerta-coreq { background-color: var(--cor-alerta) !important; color: #fff !important; border-color: #e65100; cursor: pointer; transform: scale(0.98); }
         .alerta-coreq::after { content: '!'; position: absolute; top: -6px; right: -6px; background: #e65100; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 11px; font-weight: bold; line-height: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
         .falta-prereq { animation: piscarErro 1.5s ease; border-color: var(--cor-erro) !important; border-width: 3px !important; opacity: 1 !important; filter: none !important; }
         @keyframes piscarErro { 0% { transform: scale(1); box-shadow: 0 0 0 rgba(244, 67, 54, 0); } 50% { transform: scale(1.05); box-shadow: 0 0 15px rgba(244, 67, 54, 0.9); } 100% { transform: scale(1); box-shadow: 0 0 0 rgba(244, 67, 54, 0); } }
 
-        /* CORES DAS ÁREAS */
         .exatas { background-color: var(--cor-exatas); }
         .prodbas { background-color: var(--cor-producao-bas); color: #fff; }
         .prodesp { background-color: var(--cor-producao-esp); color: #fff; }
@@ -181,11 +182,12 @@
                 <div class="contador-semestres" title="O tempo cronológico que você está na UnB">
                     <span style="color: #aaa; font-weight: normal; font-size: 0.7rem;">Tempo na UnB:</span> 
                     <button onclick="mudarSemestre(-1)">-</button>
-                    <span id="txt-semestres" style="width: 16px; text-align: center;">1</span>
+                    <span id="txt-semestres" style="width: 75px; text-align: center;">1 semestre</span>
                     <button onclick="mudarSemestre(1)">+</button>
                 </div>
                 <div class="botoes-acao">
-                    <button class="btn-reset" onclick="limparProgresso()" title="Apagar progresso salvo">Zerar Tudo</button>
+                    <button class="btn-simular" id="btn-modo-sim" onclick="toggleModoSimulacao()" title="Planeje o próximo semestre">Simular Semestre</button>
+                    <button class="btn-reset" onclick="limparProgresso()" title="Apagar histórico salvo">Zerar</button>
                 </div>
             </div>
             
@@ -195,11 +197,27 @@
         </div>
     </header>
 
+    <div id="barra-simulacao" class="barra-simulacao">
+        <div class="sim-info">
+            <div class="sim-titulo">
+                📅 Simulação de Matrícula Ativa
+                <span id="alerta-horas" style="display:none; color: #ff5252; font-size: 0.8rem; background: rgba(255,255,255,0.9); padding: 2px 6px; border-radius: 4px;">⚠️ Excede 420h/semestre permitidas pela UnB!</span>
+            </div>
+            <div class="sim-detalhes">
+                Você selecionou <b id="sim-qtd">0</b> matérias (Total: <b id="sim-horas">0</b>h).
+            </div>
+            <div class="sim-destranca" id="sim-destranca-texto">
+                Isso não destranca nenhuma matéria nova no momento.
+            </div>
+        </div>
+        <button class="btn-limpar-sim" onclick="limparSimulacao()">Sair do Modo Simulação</button>
+    </div>
+
     <div class="main-container">
         
         <div class="boas-vindas">
             <h2>Domine sua grade horária.</h2>
-            <p>Esqueça a confusão do SIGAA! Aqui os pré e co-requisitos não são mais um problema. Marque o que já fez, planeje seus próximos passos e acompanhe seu progresso até o diploma!</p>
+            <p>Esqueça a confusão do SIGAA. Onde os pré e co-requisitos não são mais um problema. Marque o que já fez, ative o Simulador para planejar o limite ideal de horas e veja o que você destranca no futuro!</p>
         </div>
 
         <div class="secao-especial" style="border-color: #888;">
@@ -214,26 +232,23 @@
             <div id="optativas-grid" class="grid-cards"></div>
         </div>
 
-        <div class="secao-especial" style="border-color: #5c88c2;">
-            <div class="secao-titulo" style="color: #5c88c2; border-color: #5c88c2;">Marcos de Formatura & Projetos Finais</div>
-            <div id="marcos-grid" class="grid-cards"></div>
-        </div>
-
     </div>
 
     <script>
         const META_TOTAL = 3600;
+        const LIMITE_HORAS_UNB = 420; 
         let semestreAtual = 1;
         let concluidas = new Set(); 
+        
+        let planejadas = new Set();
+        let modoSimulacao = false;
 
         const CADEIA_1 = ["desenhomec1", "desenhomec2"];
         const CADEIA_2 = ["algebralin1", "algebralin2"];
         const CADEIA_3 = ["comp1", "comp2"];
         const CADEIA_4 = ["mecsol1", "mecsol2"];
 
-        // BANCO DE DADOS
         const disciplinas = [
-            // SEMESTRE 1
             { id: "sustent", codigo: "CDS0007", nome: "INTROD. DESENV. SUSTENTÁVEL", sem: 1, horas: 60, req: [], coreq: [], area: "humanas" },
             { id: "introep", codigo: "EPR0056", nome: "INTRODUÇÃO À EP", sem: 1, horas: 30, req: [], coreq: [], area: "prodbas" },
             { id: "engtrabalho", codigo: "EPR0076", nome: "ENGENHARIA DO TRABALHO", sem: 1, horas: 30, req: [], coreq: [], area: "prodbas" },
@@ -241,57 +256,47 @@
             { id: "fis1exp", codigo: "IFD0173", nome: "FÍSICA 1 EXP.", sem: 1, horas: 30, req: [], coreq: ["fis1"], area: "exatas" },
             { id: "calc1", codigo: "MAT0025", nome: "CÁLCULO 1", sem: 1, horas: 90, req: [], coreq: [], area: "exatas" },
 
-            // SEMESTRE 2
             { id: "formvalor", codigo: "EPR0061", nome: "FORM. DE VALOR EM SIST. PROD.", sem: 2, horas: 30, req: ["introep"], coreq: [], area: "prodbas" },
             { id: "fis2exp", codigo: "IFD0177", nome: "FÍSICA 2 EXP.", sem: 2, horas: 60, req: ["calc1", "fis1"], coreq: [], area: "exatas" },
             { id: "fis2", codigo: "IFD0175", nome: "FÍSICA 2", sem: 2, horas: 60, req: ["fis1", "fis1exp", "calc1"], coreq: [], area: "exatas" },
             { id: "calc2", codigo: "MAT0026", nome: "CÁLCULO 2", sem: 2, horas: 90, req: ["calc1"], coreq: [], area: "exatas" },
 
-            // SEMESTRE 3
             { id: "metodologia", codigo: "EPR0069", nome: "METODOLOGIA PROJ. SIST. PROD.", sem: 3, horas: 30, req: ["introep"], coreq: [], area: "prodbas" },
             { id: "fis3", codigo: "IFD0179", nome: "FÍSICA 3", sem: 3, horas: 60, req: ["fis2"], coreq: [], area: "exatas" },
             { id: "calc3", codigo: "MAT0027", nome: "CÁLCULO 3", sem: 3, horas: 90, req: ["calc1"], coreq: [], area: "exatas" },
 
-            // SEMESTRE 4
             { id: "transcalor", codigo: "ENM0128", nome: "TRANSP. DE CALOR E MASSA", sem: 4, horas: 60, req: ["fis2", "calc3", "fis2exp"], coreq: [], area: "exatas" },
             { id: "psp1", codigo: "EPR0071", nome: "PSP 1", sem: 4, horas: 30, req: ["formvalor", "metodologia", "engtrabalho"], coreq: [], area: "projetos" },
             { id: "probest", codigo: "EST0023", nome: "PROBABILIDADE E ESTATÍSTICA", sem: 4, horas: 60, req: ["calc1"], coreq: [], area: "exatas" },
             { id: "quimicateo", codigo: "IQD0125", nome: "QUÍMICA GERAL TEÓRICA", sem: 4, horas: 60, req: [], coreq: [], area: "exatas" },
             { id: "quimicaexp", codigo: "IQD0126", nome: "QUÍMICA GERAL EXP.", sem: 4, horas: 30, req: [], coreq: [], area: "exatas" },
 
-            // SEMESTRE 5
             { id: "introeco", codigo: "ECO0019", nome: "INTRODUÇÃO À ECONOMIA", sem: 5, horas: 60, req: [], coreq: [], area: "humanas" },
             { id: "engeco", codigo: "EPR0064", nome: "ENGENHARIA ECONÔMICA", sem: 5, horas: 60, req: ["probest"], coreq: [], area: "prodesp" },
             { id: "sisinfo", codigo: "EPR0072", nome: "SIST. INFORMAÇÃO EM EP", sem: 5, horas: 60, req: [CADEIA_3], coreq: [], area: "prodesp" },
             { id: "psp2", codigo: "EPR0073", nome: "PSP 2", sem: 5, horas: 30, req: ["psp1"], coreq: ["sisinfo"], area: "projetos" },
 
-            // SEMESTRE 6
             { id: "cienciamat", codigo: "ENM0126", nome: "INTROD. CIÊNCIA DOS MATERIAIS", sem: 6, horas: 45, req: ["quimicateo"], coreq: [], area: "exatas" },
             { id: "pesqoperacional", codigo: "EPR0066", nome: "PESQUISA OPERACIONAL 1", sem: 6, horas: 90, req: ["probest"], coreq: [], area: "prodesp" },
             { id: "cienciapol", codigo: "POL0011", nome: "INTROD. CIÊNCIA POLÍTICA", sem: 6, horas: 60, req: [], coreq: [], area: "humanas" },
 
-            // SEMESTRE 7
             { id: "procfab", codigo: "ENM0171", nome: "PROCESSOS DE FABRICAÇÃO", sem: 7, horas: 60, req: ["cienciamat"], coreq: [], area: "prodesp" },
             { id: "pcp", codigo: "EPR0002", nome: "PLANEJ. CONTROLE PROD. (PCP)", sem: 7, horas: 60, req: ["sisinfo"], coreq: [], area: "prodesp" },
             { id: "psp4", codigo: "EPR0001", nome: "PSP 4", sem: 7, horas: 30, req: ["psp2"], coreq: ["pcp"], area: "projetos" },
             { id: "simulacao", codigo: "EPR0004", nome: "SIMULAÇÃO DE SISTEMAS", sem: 7, horas: 60, req: ["pesqoperacional"], coreq: [], area: "prodesp" },
             { id: "seguranca", codigo: "EPR0006", nome: "SEGURANÇA E SAÚDE NO TRAB.", sem: 7, horas: 60, req: ["psp2"], coreq: [], area: "humanas" },
 
-            // SEMESTRE 8
             { id: "qualidade", codigo: "EPR0030", nome: "GESTÃO DA QUALIDADE", sem: 8, horas: 60, req: ["probest"], coreq: ["psp5"], area: "prodesp" },
             { id: "psp5", codigo: "EPR0007", nome: "PSP 5", sem: 8, horas: 30, req: ["engeco", "psp2", "pesqoperacional"], coreq: [], area: "projetos" },
             { id: "ergosist", codigo: "EPR0077", nome: "ERGONOMIA SIST. PRODUTIVOS", sem: 8, horas: 60, req: ["engtrabalho"], coreq: [], area: "humanas" },
 
-            // SEMESTRE 9
             { id: "logistica", codigo: "EPR0012", nome: "LOGÍSTICA", sem: 9, horas: 60, req: ["pesqoperacional"], coreq: [], area: "prodesp" },
             { id: "engproduto", codigo: "EPR0013", nome: "ENGENHARIA DO PRODUTO", sem: 9, horas: 60, req: ["pcp"], coreq: [], area: "prodesp" },
             { id: "psp6", codigo: "EPR0008", nome: "PSP 6", sem: 9, horas: 30, req: ["psp2", "pesqoperacional", "engeco"], coreq: ["engproduto"], area: "projetos" },
 
-            // SEMESTRE 10
             { id: "estrategica", codigo: "EPR0065", nome: "GESTÃO ESTRATÉGICA", sem: 10, horas: 60, req: ["engeco"], coreq: [], area: "prodesp" },
             { id: "psp7", codigo: "EPR0009", nome: "PSP 7", sem: 10, horas: 30, req: ["psp2", "pesqoperacional", "engeco"], coreq: ["estrategica"], area: "projetos" },
 
-            // AS 8 SELETIVAS
             { id: "desenhomec1", codigo: "ENM0131", nome: "DESENHO MEC. ASSIST. 1", sem: 97, horas: 90, req: [], coreq: [], area: "seletiva-chave" },
             { id: "desenhomec2", codigo: "ENM0190", nome: "DESENHO MEC. ENG.", sem: 97, horas: 60, req: [], coreq: [], area: "seletiva-chave" },
             { id: "algebralin1", codigo: "MAT0127", nome: "ALGEBRA LIN. E GEOMETRIA", sem: 97, horas: 90, req: [], coreq: [], area: "seletiva-chave" },
@@ -301,7 +306,6 @@
             { id: "mecsol1", codigo: "ENC0035", nome: "INTROD. MECÂNICA SÓLIDOS", sem: 97, horas: 60, req: [], coreq: [], area: "seletiva-chave" },
             { id: "mecsol2", codigo: "ENC0132", nome: "MECÂNICA DOS SÓLIDOS 1", sem: 97, horas: 60, req: [], coreq: [], area: "seletiva-chave" },
 
-            // MARCOS FINAIS
             { id: "estagio", codigo: "EPR0010", nome: "ESTÁGIO SUPERVISIONADO", sem: 99, horas: 180, req: ["simulacao", "pcp", "seguranca"], coreq: [], area: "humanas" },
             { id: "tcc1", codigo: "EPR0045", nome: "PROJETO DE GRADUAÇÃO 1", sem: 99, horas: 30, req: ["simulacao", "pcp", "qualidade", "seguranca"], coreq: [], area: "projetos" },
             { id: "tcc2", codigo: "EPR0046", nome: "PROJETO DE GRADUAÇÃO 2", sem: 99, horas: 30, req: ["tcc1"], coreq: [], area: "projetos" }
@@ -311,6 +315,62 @@
         cargasOptativas.forEach((carga, index) => {
             disciplinas.push({ id: `opt${index + 1}`, codigo: "OPT", nome: "LIVRE", sem: 98, horas: carga, req: [], coreq: [], area: "optativa" });
         });
+
+        function toggleModoSimulacao() {
+            modoSimulacao = !modoSimulacao;
+            const btn = document.getElementById('btn-modo-sim');
+            const barra = document.getElementById('barra-simulacao');
+            
+            if (modoSimulacao) {
+                btn.classList.add('ativo');
+                btn.innerText = "Simulando...";
+                barra.classList.add('visivel');
+            } else {
+                limparSimulacao();
+            }
+            atualizarInterface();
+        }
+
+        function limparSimulacao() {
+            planejadas.clear();
+            modoSimulacao = false;
+            document.getElementById('btn-modo-sim').classList.remove('ativo');
+            document.getElementById('btn-modo-sim').innerText = "Simular Semestre";
+            document.getElementById('barra-simulacao').classList.remove('visivel');
+            atualizarInterface();
+        }
+
+        function getDependentesFuturos(idBase, dependentes = new Set()) {
+            disciplinas.forEach(mat => {
+                let trancaEssaMat = false;
+                mat.req.forEach(reqItem => {
+                    if (Array.isArray(reqItem)) { if (reqItem.includes(idBase)) trancaEssaMat = true; } 
+                    else { if (reqItem === idBase) trancaEssaMat = true; }
+                });
+                
+                if (trancaEssaMat && !dependentes.has(mat.id)) {
+                    dependentes.add(mat.id);
+                    getDependentesFuturos(mat.id, dependentes);
+                }
+            });
+            return dependentes;
+        }
+
+        function iluminarDominó(idBase) {
+            const dependentes = getDependentesFuturos(idBase);
+            if (dependentes.size === 0) return;
+            
+            dependentes.forEach(depId => {
+                const el = document.getElementById(depId);
+                if (el) el.classList.add('efeito-domino');
+            });
+        }
+
+        function apagarDominó() {
+            document.querySelectorAll('.efeito-domino').forEach(el => {
+                el.classList.remove('efeito-domino');
+            });
+        }
 
         function carregarDadosSalvos() {
             const progressoSalvo = localStorage.getItem('progresso_EPR_UnB');
@@ -327,11 +387,12 @@
         }
 
         function limparProgresso() {
-            if (confirm("Deseja realmente apagar todo o seu progresso?")) {
+            if (confirm("Deseja apagar todo o seu histórico real salvo? (Isso não afeta o simulador)")) {
                 localStorage.clear();
                 concluidas.clear();
+                planejadas.clear();
                 semestreAtual = 1;
-                document.getElementById('txt-semestres').innerText = `1`;
+                document.getElementById('txt-semestres').innerText = '1 semestre';
                 atualizarInterface();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
@@ -341,7 +402,6 @@
             const fluxoContainer = document.getElementById('fluxograma-container');
             const seletivasContainer = document.getElementById('seletivas-grid');
             const optativasContainer = document.getElementById('optativas-grid');
-            const marcosContainer = document.getElementById('marcos-grid');
 
             for (let i = 1; i <= 10; i++) {
                 const matSemestre = disciplinas.filter(d => d.sem === i);
@@ -353,6 +413,29 @@
                 containerCards.className = 'grid-cards';
                 matSemestre.forEach(mat => containerCards.appendChild(criarCardHTML(mat)));
                 coluna.appendChild(containerCards);
+
+                if (i === 10) {
+                    const divisor = document.createElement('div');
+                    divisor.style.marginTop = '25px';
+                    divisor.style.paddingTop = '10px';
+                    divisor.style.borderTop = '2px dashed var(--cor-borda-semestre)';
+                    divisor.innerHTML = `<div style="font-weight: bold; font-size: 0.85rem; color: #5c88c2; text-align: center; margin-bottom: 10px; text-transform: uppercase;">Marcos Finais</div>`;
+
+                    const containerMarcos = document.createElement('div');
+                    containerMarcos.className = 'grid-cards';
+                    
+                    disciplinas.filter(d => d.sem === 99).forEach(mat => {
+                        let card = criarCardHTML(mat);
+                        card.style.minHeight = '40px';
+                        card.style.padding = '6px';
+                        card.querySelector('.card-nome').style.fontSize = '0.65rem';
+                        containerMarcos.appendChild(card);
+                    });
+
+                    divisor.appendChild(containerMarcos);
+                    coluna.appendChild(divisor);
+                }
+
                 fluxoContainer.appendChild(coluna);
             }
 
@@ -383,13 +466,13 @@
             });
 
             disciplinas.filter(d => d.sem === 98).forEach(mat => optativasContainer.appendChild(criarCardHTML(mat)));
-            disciplinas.filter(d => d.sem === 99).forEach(mat => marcosContainer.appendChild(criarCardHTML(mat)));
         }
 
         function criarCardHTML(mat) {
             const card = document.createElement('div');
             card.id = mat.id;
             card.className = `card ${mat.area}`;
+            
             card.innerHTML = `
                 <div style="display: flex; flex-direction: column;">
                     <span class="card-codigo">${mat.codigo}</span>
@@ -397,7 +480,13 @@
                 </div>
                 <span class="ch-badge">${mat.horas}h</span>
             `;
+            
             card.addEventListener('click', () => toggleCard(mat.id));
+            card.addEventListener('mouseenter', () => iluminarDominó(mat.id));
+            card.addEventListener('mouseleave', () => apagarDominó());
+            card.addEventListener('touchstart', () => iluminarDominó(mat.id), {passive: true});
+            card.addEventListener('touchend', () => setTimeout(apagarDominó, 1500));
+
             return card;
         }
 
@@ -405,8 +494,21 @@
             const card = document.getElementById(id);
             if (!card) return;
 
+            if (modoSimulacao) {
+                if (concluidas.has(id)) return; 
+                if (planejadas.has(id)) {
+                    removerPlanejadaCascata(id);
+                } else if (!card.classList.contains('bloqueado')) {
+                    planejadas.add(id);
+                } else {
+                    mostrarPendenciasE_Scroll(id, new Set([...concluidas, ...planejadas]));
+                }
+                atualizarInterface();
+                return;
+            }
+
             if (card.classList.contains('bloqueado')) {
-                mostrarPendenciasE_Scroll(id);
+                mostrarPendenciasE_Scroll(id, concluidas);
                 return;
             }
 
@@ -430,24 +532,20 @@
             }
         }
 
-        function mostrarPendenciasE_Scroll(id) {
+        function mostrarPendenciasE_Scroll(id, conjuntoAnalisado) {
             const mat = disciplinas.find(d => d.id === id);
             if (!mat) return;
 
             let scrollAcionado = false;
             mat.req.forEach(reqItem => {
                 if (Array.isArray(reqItem)) {
-                    const isAtendido = reqItem.some(orId => concluidas.has(orId));
+                    const isAtendido = reqItem.some(orId => conjuntoAnalisado.has(orId));
                     if (!isAtendido) {
-                        reqItem.forEach(orId => {
-                            piscarCard(orId, !scrollAcionado);
-                            scrollAcionado = true; 
-                        });
+                        reqItem.forEach(orId => { piscarCard(orId, !scrollAcionado); scrollAcionado = true; });
                     }
                 } else {
-                    if (!concluidas.has(reqItem)) {
-                        piscarCard(reqItem, !scrollAcionado);
-                        scrollAcionado = true;
+                    if (!conjuntoAnalisado.has(reqItem)) {
+                        piscarCard(reqItem, !scrollAcionado); scrollAcionado = true;
                     }
                 }
             });
@@ -469,12 +567,158 @@
             });
         }
 
+        function removerPlanejadaCascata(idBase) {
+            planejadas.delete(idBase);
+            disciplinas.forEach(mat => {
+                mat.req.forEach(reqItem => {
+                    if (Array.isArray(reqItem)) {
+                        if (reqItem.includes(idBase) && planejadas.has(mat.id)) {
+                            const aindaSustenta = reqItem.some(orId => planejadas.has(orId) || concluidas.has(orId));
+                            if (!aindaSustenta) removerPlanejadaCascata(mat.id);
+                        }
+                    } else if (reqItem === idBase && planejadas.has(mat.id)) {
+                        removerPlanejadaCascata(mat.id);
+                    }
+                });
+            });
+        }
+
+        function avaliarConjunto(conjuntoTeste) {
+            let disponiveis = new Set();
+            disciplinas.forEach(mat => {
+                const reqsOk = mat.req.every(r => Array.isArray(r) ? r.some(id => conjuntoTeste.has(id)) : conjuntoTeste.has(r));
+                const preReqsValidos = mat.req.every(reqItem => {
+                    if (Array.isArray(reqItem)) {
+                        return reqItem.some(orReqId => {
+                            if (!conjuntoTeste.has(orReqId)) return false;
+                            const reqMat = disciplinas.find(d => d.id === orReqId);
+                            return reqMat ? reqMat.coreq.every(cr => conjuntoTeste.has(cr)) : true;
+                        });
+                    } else {
+                        const reqMat = disciplinas.find(d => d.id === reqItem);
+                        return reqMat ? reqMat.coreq.every(cr => conjuntoTeste.has(cr)) : true;
+                    }
+                });
+                if (reqsOk && preReqsValidos && !conjuntoTeste.has(mat.id)) disponiveis.add(mat.id);
+            });
+            return disponiveis;
+        }
+
+        function atualizarInterface() {
+            let totalHorasFeitas = 0;
+            let totalHorasPlanejadas = 0;
+            
+            const conjMisto = new Set([...concluidas, ...planejadas]);
+
+            const dispReais = avaliarConjunto(concluidas);
+            const dispSimulados = avaliarConjunto(conjMisto);
+            
+            let matsDestrancadasTexto = [];
+            dispSimulados.forEach(id => { 
+                if (!dispReais.has(id)) {
+                    matsDestrancadasTexto.push(disciplinas.find(d=>d.id===id).nome);
+                }
+            });
+
+            disciplinas.forEach(mat => {
+                const card = document.getElementById(mat.id);
+                if (!card) return;
+
+                const reqsAtendidos = mat.req.every(r => Array.isArray(r) ? r.some(id => conjMisto.has(id)) : conjMisto.has(r));
+                const preReqsValidos = mat.req.every(reqItem => {
+                    if (Array.isArray(reqItem)) {
+                        return reqItem.some(orReqId => {
+                            if (!conjMisto.has(orReqId)) return false;
+                            const reqMat = disciplinas.find(d => d.id === orReqId);
+                            return reqMat ? reqMat.coreq.every(cr => conjMisto.has(cr)) : true;
+                        });
+                    } else {
+                        const reqMat = disciplinas.find(d => d.id === reqItem);
+                        return reqMat ? reqMat.coreq.every(cr => conjMisto.has(cr)) : true;
+                    }
+                });
+                const coreqsAtendidos = mat.coreq.every(cr => conjMisto.has(cr));
+
+                card.classList.remove('concluido', 'planejado', 'disponivel', 'bloqueado', 'alerta-coreq', 'destrancado-simulacao');
+                card.title = "";
+
+                if (concluidas.has(mat.id)) {
+                    if (!mat.coreq.every(cr => concluidas.has(cr))) {
+                        card.classList.add('alerta-coreq');
+                        const nomes = mat.coreq.map(cId => disciplinas.find(d => d.id === cId).nome).join(' e ');
+                        card.title = `Falta cursar simultaneamente: ${nomes}`;
+                    } else {
+                        card.classList.add('concluido');
+                    }
+                    totalHorasFeitas += mat.horas;
+
+                } else if (planejadas.has(mat.id)) {
+                    if (!coreqsAtendidos) {
+                        card.classList.add('alerta-coreq');
+                        const nomes = mat.coreq.map(cId => disciplinas.find(d => d.id === cId).nome).join(' e ');
+                        card.title = `Atenção na matrícula real: Exige também ${nomes}`;
+                    } else {
+                        card.classList.add('planejado');
+                    }
+                    totalHorasPlanejadas += mat.horas;
+
+                } else if (reqsAtendidos && preReqsValidos) {
+                    if (modoSimulacao && dispSimulados.has(mat.id) && !dispReais.has(mat.id)) {
+                        card.classList.add('destrancado-simulacao');
+                        card.title = "Matéria liberada no futuro pelo seu planejamento atual!";
+                    } else {
+                        card.classList.add('disponivel');
+                        card.title = "Liberada. Clique para " + (modoSimulacao ? "planejar." : "concluir.");
+                    }
+                } else {
+                    card.classList.add('bloqueado');
+                    card.title = "Faltam pré-requisitos.";
+                }
+            });
+
+            const percTotal = (totalHorasFeitas / META_TOTAL) * 100;
+            document.getElementById('txt-perc').innerText = Math.min(percTotal, 100).toFixed(1);
+            
+            const saude = calcularSaudeCurso(totalHorasFeitas, semestreAtual);
+            document.getElementById('perc-container').style.color = saude.corHEx;
+            document.getElementById('termometro').innerText = saude.status;
+            document.getElementById('termometro').className = `termometro ${saude.classe}`;
+            document.getElementById('msg-termometro').innerText = saude.msg;
+
+            if (modoSimulacao) {
+                const barraSimulacao = document.getElementById('barra-simulacao');
+                const alertaHoras = document.getElementById('alerta-horas');
+                
+                document.getElementById('sim-qtd').innerText = planejadas.size;
+                document.getElementById('sim-horas').innerText = totalHorasPlanejadas;
+                
+                if (totalHorasPlanejadas > LIMITE_HORAS_UNB) {
+                    barraSimulacao.classList.add('limite-excedido');
+                    alertaHoras.style.display = 'inline-block';
+                } else {
+                    barraSimulacao.classList.remove('limite-excedido');
+                    alertaHoras.style.display = 'none';
+                }
+
+                if (matsDestrancadasTexto.length > 0) {
+                    const maxMostrados = 3;
+                    const previewText = matsDestrancadasTexto.slice(0, maxMostrados).join(', ');
+                    const maisTexto = matsDestrancadasTexto.length > maxMostrados ? ` e mais ${matsDestrancadasTexto.length - maxMostrados}...` : '';
+                    document.getElementById('sim-destranca-texto').innerHTML = `🔓 Destrancou: <span style="font-weight:normal; color:#fff;">${previewText}${maisTexto}</span>`;
+                } else {
+                    document.getElementById('sim-destranca-texto').innerText = "Isso não destranca nenhuma matéria imediata no futuro.";
+                }
+            }
+
+            atualizarNivelDoAluno();
+        }
+
         function calcularSaudeCurso(horasFeitas, semestreA) {
-            if (horasFeitas === 0 && semestreA === 1) return { status: "INICIANDO", classe: "status-verde", msg: "Bem-vindo ao curso! Selecione as matérias.", corHEx: "var(--cor-saudavel)" };
+            if (horasFeitas === 0 && semestreA === 1) return { status: "INICIANDO", classe: "status-verde", msg: "Bem-vindo ao curso!", corHEx: "var(--cor-saudavel)" };
             const ritmo = horasFeitas / semestreA;
             if (ritmo >= 280) return { status: "SAUDÁVEL", classe: "status-verde", msg: "Ritmo ideal! Caminhando para formatura em até 12 semestres.", corHEx: "var(--cor-saudavel)" };
-            else if (ritmo >= 200) return { status: "ATENÇÃO", classe: "status-amarelo", msg: "Ritmo moderado. Caminhando para formatura entre 13 e 17 semestres.", corHEx: "#ff9800" };
-            else return { status: "RISCO CRÍTICO", classe: "status-vermelho", msg: "Risco de Jubilamento! Seu ritmo atual extrapola o prazo máximo de 18 semestres.", corHEx: "#f44336" };
+            else if (ritmo >= 200) return { status: "ATENÇÃO", classe: "status-amarelo", msg: "Ritmo moderado. Formatura entre 13 e 17 semestres.", corHEx: "#ff9800" };
+            else return { status: "RISCO CRÍTICO", classe: "status-vermelho", msg: "Risco de Jubilamento! Extrapola o limite de 18 semestres.", corHEx: "#f44336" };
         }
 
         function atualizarNivelDoAluno() {
@@ -496,84 +740,18 @@
             }
         }
 
-        function atualizarInterface() {
-            let totalHorasFeitas = 0;
-
-            disciplinas.forEach(mat => {
-                const card = document.getElementById(mat.id);
-                if (!card) return;
-
-                const requisitosAtendidos = mat.req.every(reqItem => {
-                    if (Array.isArray(reqItem)) return reqItem.some(orReqId => concluidas.has(orReqId));
-                    return concluidas.has(reqItem);
-                });
-
-                const preReqsValidos = mat.req.every(reqItem => {
-                    if (Array.isArray(reqItem)) {
-                        return reqItem.some(orReqId => {
-                            if (!concluidas.has(orReqId)) return false;
-                            const reqMat = disciplinas.find(d => d.id === orReqId);
-                            if (!reqMat) return true;
-                            return reqMat.coreq.every(cr => concluidas.has(cr));
-                        });
-                    } else {
-                        const reqMat = disciplinas.find(d => d.id === reqItem);
-                        if (!reqMat) return true;
-                        return reqMat.coreq.every(cr => concluidas.has(cr));
-                    }
-                });
-
-                const corequisitosAtendidos = mat.coreq.every(cr => concluidas.has(cr));
-
-                card.classList.remove('concluido', 'disponivel', 'bloqueado', 'alerta-coreq');
-                card.title = ""; // Reseta tooltip
-
-                if (concluidas.has(mat.id)) {
-                    if (!corequisitosAtendidos) {
-                        card.classList.add('alerta-coreq');
-                        const nomesCoreqs = mat.coreq.map(cId => disciplinas.find(d => d.id === cId).nome).join(' e ');
-                        card.title = `Falta cursar simultaneamente: ${nomesCoreqs}`;
-                    } else {
-                        card.classList.add('concluido');
-                    }
-                    totalHorasFeitas += mat.horas;
-
-                } else if (requisitosAtendidos && preReqsValidos) {
-                    card.classList.add('disponivel');
-                    card.title = "Matéria liberada para cursar.";
-                } else {
-                    card.classList.add('bloqueado');
-                    card.title = "Faltam pré-requisitos. Clique para ver quais.";
-                }
-            });
-
-            const saude = calcularSaudeCurso(totalHorasFeitas, semestreAtual);
-            const percTotal = (totalHorasFeitas / META_TOTAL) * 100;
-            document.getElementById('txt-perc').innerText = Math.min(percTotal, 100).toFixed(1);
-            document.getElementById('perc-container').style.color = saude.corHEx;
-
-            const badgeTermometro = document.getElementById('termometro');
-            const msgTermometro = document.getElementById('msg-termometro');
-            badgeTermometro.innerText = saude.status;
-            badgeTermometro.className = `termometro ${saude.classe}`;
-            msgTermometro.innerText = saude.msg;
-
-            atualizarNivelDoAluno();
-        }
-
         function mudarSemestre(valor) {
             semestreAtual += valor;
             if (semestreAtual < 1) semestreAtual = 1;
-            document.getElementById('txt-semestres').innerText = `${semestreAtual}`;
+            document.getElementById('txt-semestres').innerText = semestreAtual === 1 ? '1 semestre' : `${semestreAtual} semestres`;
             salvarDados(); 
             atualizarInterface(); 
         }
 
         carregarDadosSalvos(); 
         construirInterface();
-        document.getElementById('txt-semestres').innerText = `${semestreAtual}`; 
+        document.getElementById('txt-semestres').innerText = semestreAtual === 1 ? '1 semestre' : `${semestreAtual} semestres`; 
         atualizarInterface();
     </script>
 </body>
-
 </html>
